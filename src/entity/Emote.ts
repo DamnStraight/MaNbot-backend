@@ -21,7 +21,7 @@ export default class Emote extends BaseEntity {
     }
   }
 
-  @Field(() => ID)
+  @Field()
   @PrimaryColumn()
   id: string;
 

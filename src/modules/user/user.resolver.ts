@@ -1,4 +1,4 @@
-import { Resolver, Query, Arg, Int } from "type-graphql";
+import { Resolver, Query, Arg, Int, Mutation } from "type-graphql";
 import User from "../../entity/User";
 import { UserService } from "../../service/user.service";
 
@@ -6,13 +6,23 @@ import { UserService } from "../../service/user.service";
 export class UserResolver {
   constructor(private readonly userService: UserService) {}
 
-  @Query(type => User, { nullable: true })
-  async user(@Arg("userId", () => Int) userId: number) {
+  @Query(returns => User, { nullable: true })
+  async user(@Arg("userId") userId: string): Promise<User | undefined> {
     return await this.userService.getOne(userId);
   }
 
-  @Query(type => [User])
-  async users() {
+  @Query(returns => [User])
+  async users(): Promise<User[]> {
     return await this.userService.getAll();
+  }
+
+  /**
+   * Creates user if it doesn't exist, otherwise returns existing
+   *
+   * @param userId
+   */
+  @Mutation(returns => User, { nullable: true })
+  async addUser(@Arg("userId") userId: string): Promise<User | null> {
+    return await this.userService.addUser(userId);
   }
 }

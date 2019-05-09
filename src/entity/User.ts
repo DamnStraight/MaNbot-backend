@@ -7,7 +7,7 @@ import {
   BaseEntity
 } from "typeorm";
 import { EmoteCount } from "./EmoteCount";
-import { ObjectType, Field, ID, Int } from "type-graphql";
+import { ObjectType, Field } from "type-graphql";
 
 @ObjectType()
 @Entity()
@@ -17,7 +17,7 @@ export default class User extends BaseEntity {
     if (data) this.id = data;
   }
 
-  @Field(() => Int)
+  @Field()
   @PrimaryColumn()
   id: string;
 

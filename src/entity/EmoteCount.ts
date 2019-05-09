@@ -13,16 +13,16 @@ import { ObjectType, Field, ID } from "type-graphql";
 @ObjectType()
 @Entity()
 export class EmoteCount {
-  @Field(() => ID)
+  @Field()
   @PrimaryGeneratedColumn()
   id: number;
 
   @Field()
-  @ManyToOne(type => Emote, emote => emote.emoteCounts)
+  @ManyToOne(typeOf => Emote, emote => emote.emoteCounts)
   emote: Emote;
 
-  @Field(type => User)
-  @ManyToOne(type => User, user => user.emoteCounts)
+  @Field(typeOf => User)
+  @ManyToOne(typeOf => User, user => user.emoteCounts)
   user: User;
 
   @Field()

@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon --ext ts,graphql --exec babel-node ./src --extensions \".ts,.graphql\"",
+    "start": "set DEBUG=app,service:* & nodemon --ext ts,graphql --exec babel-node ./src --extensions \".ts,.graphql\"",
     "build": "babel ./src --out-dir dist --extensions \".ts,.graphql\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -17,10 +17,10 @@
     "@babel/node": "^7.2.2",
     "@babel/preset-env": "^7.4.4",
     "@babel/preset-typescript": "^7.3.3",
-    "@types/node": "^12.0.0",
     "apollo-server-express": "^2.5.0",
     "babel-plugin-transform-typescript-metadata": "^0.2.2",
     "cors": "^2.8.5",
+    "debug": "^4.1.1",
     "express": "^4.16.4",
     "graphql": "^14.3.0",
     "nodemon": "^1.19.0",
@@ -33,6 +33,8 @@
   },
   "devDependencies": {
     "@babel/plugin-proposal-class-properties": "^7.4.4",
-    "@babel/plugin-proposal-decorators": "^7.4.4"
+    "@babel/plugin-proposal-decorators": "^7.4.4",
+    "@types/debug": "^4.1.4",
+    "@types/node": "^12.0.0"
   }
 }
