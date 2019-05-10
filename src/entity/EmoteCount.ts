@@ -4,7 +4,8 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
-  PrimaryGeneratedColumn
+  PrimaryGeneratedColumn,
+  BaseEntity
 } from "typeorm";
 import Emote from "./Emote";
 import User from "./User";
@@ -12,7 +13,16 @@ import { ObjectType, Field, ID } from "type-graphql";
 
 @ObjectType()
 @Entity()
-export class EmoteCount {
+export class EmoteCount extends BaseEntity {
+  public constructor(data?: EmoteCount) {
+    super();
+    if (data) {
+      this.emote = data.emote;
+      this.user = data.user;
+      this.count = data.count || 0;
+    }
+  }
+
   @Field()
   @PrimaryGeneratedColumn()
   id: number;
@@ -36,4 +46,8 @@ export class EmoteCount {
   @Field()
   @Column()
   count: number;
+
+  addCount(add: number) {
+    this.count += add;
+  }
 }

@@ -6,12 +6,13 @@ import { createConnection } from "typeorm";
 import { Container } from "typedi";
 import { UserResolver } from "./modules/user/user.resolver";
 import { EmoteResolver } from "./modules/emote/emote.resolver";
+import { EmoteCountResolver } from './modules/emoteCount/emoteCount.resolver';
 
 const main = async () => {
   await createConnection();
 
   const schema = await buildSchema({
-    resolvers: [UserResolver, EmoteResolver],
+    resolvers: [UserResolver, EmoteResolver, EmoteCountResolver],
     container: Container
   });
 

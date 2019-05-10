@@ -8,7 +8,7 @@ import serviceDebug from "../util/serviceDebug";
 export class UserService {
   async getOne(id: string) {
     serviceDebug("event", "user", `Querying getOne() with id { ${id} }`);
-    return await User.findOne(id);
+    return await User.findOne(id, { relations: ["emoteCounts", "emoteCounts.emote"]});
   }
 
   async getAll() {

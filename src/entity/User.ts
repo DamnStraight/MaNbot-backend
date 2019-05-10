@@ -29,6 +29,7 @@ export default class User extends BaseEntity {
   @UpdateDateColumn({ name: "date_updated" })
   updatedDate: Date;
 
+  @Field(type => [EmoteCount])
   @OneToMany(type => EmoteCount, emoteCount => emoteCount.user)
   emoteCounts: EmoteCount[];
 }
