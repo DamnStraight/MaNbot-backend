@@ -6,11 +6,23 @@ import serviceDebug from "../util/serviceDebug";
 
 @Service()
 export class UserService {
+  /**
+   * Get a single User entity if it exists
+   *
+   * @param id
+   */
   async getOne(id: string) {
     serviceDebug("event", "user", `Querying getOne() with id { ${id} }`);
-    return await User.findOne(id, { relations: ["emoteCounts", "emoteCounts.emote"]});
+    try {
+      return await User.findOneOrFail(id, { relations: ["emoteCounts", "emoteCounts.emote"]});
+    } catch(err) {
+      return null
+    }
   }
 
+  /**
+   * Get all user entities
+   */
   async getAll() {
     try {
       const userRepository = await getRepository(User);
@@ -23,6 +35,11 @@ export class UserService {
     }
   }
 
+  /**
+   * Add user if it does not exist, in both cases returns a User entity
+   *
+   * @param userId
+   */
   async addUser(userId: string) {
     const maybeUser = await this.getOne(userId);
 

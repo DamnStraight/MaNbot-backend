@@ -13,7 +13,7 @@ export class EmoteResolver {
    * @param userId
    */
   @Mutation(returns => [Emote], { nullable: true })
-  async addEmotes(@Arg("data") emotes: AddEmoteInput): Promise<Emote | null> {
-    return null;
+  async addEmotes(@Arg("data", type => [AddEmoteInput]) emotes: [AddEmoteInput]): Promise<Emote[]> {
+    return this.emoteService.addEmotes(emotes);
   }
 }

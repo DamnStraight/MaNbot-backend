@@ -58,7 +58,7 @@ export class EmoteService {
    * Add many emotes at once, return the result
    * @param emoteDtos
    */
-  async addEmotes(emoteDtos: AddEmoteInput[]) {
+  async addEmotes(emoteDtos: AddEmoteInput[]): Promise<Emote[]> {
     const emoteModels: Emote[] = emoteDtos.map(
       emote => new Emote({ id: emote.id, name: emote.name } as Emote)
     );

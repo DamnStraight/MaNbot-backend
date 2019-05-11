@@ -13,7 +13,8 @@ const main = async () => {
 
   const schema = await buildSchema({
     resolvers: [UserResolver, EmoteResolver, EmoteCountResolver],
-    container: Container
+    container: Container,
+    validate: false
   });
 
   const apolloServer = new ApolloServer({
