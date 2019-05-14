@@ -6,19 +6,25 @@ import { createConnection } from "typeorm";
 import { Container } from "typedi";
 import { UserResolver } from "./modules/user/user.resolver";
 import { EmoteResolver } from "./modules/emote/emote.resolver";
-import { EmoteCountResolver } from './modules/emoteCount/emoteCount.resolver';
+import { EmoteCountResolver } from "./modules/emoteCount/emoteCount.resolver";
+import { MessageResolver } from "./modules/message/message.resolver";
+import { createServer } from "http";
 
 const main = async () => {
   await createConnection();
 
   const schema = await buildSchema({
-    resolvers: [UserResolver, EmoteResolver, EmoteCountResolver],
+    resolvers: [
+      UserResolver,
+      EmoteResolver,
+      EmoteCountResolver,
+      MessageResolver
+    ],
     container: Container,
     validate: false
   });
 
   const apolloServer = new ApolloServer({
-    typeDefs: {},
     schema,
     context: {},
     introspection: true,
@@ -35,10 +41,12 @@ const main = async () => {
   });
 
   const app = express();
+  apolloServer.applyMiddleware({ app });
 
-  apolloServer.applyMiddleware({ app, path: "/graphql" });
+  const httpServer = createServer(app);
+  apolloServer.installSubscriptionHandlers(httpServer);
 
-  app.listen({ port: 4000 }, () => {
+  httpServer.listen({ port: 4000 }, () => {
     console.log(`🚀 Server ready fool`);
   });
 };

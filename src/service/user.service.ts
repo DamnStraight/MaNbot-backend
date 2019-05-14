@@ -16,7 +16,7 @@ export class UserService {
     try {
       return await User.findOneOrFail(id, { relations: ["emoteCounts", "emoteCounts.emote"]});
     } catch(err) {
-      return null
+      return undefined;
     }
   }
 

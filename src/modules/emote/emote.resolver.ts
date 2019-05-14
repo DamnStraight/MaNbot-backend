@@ -1,4 +1,4 @@
-import { Resolver, Query, Arg, Int, Mutation } from "type-graphql";
+import { Resolver, Arg, Mutation } from "type-graphql";
 import Emote from "../../entity/Emote";
 import { EmoteService } from "../../service/emote.service";
 import { AddEmoteInput } from '../../modules/emote/input/AddEmoteInput';

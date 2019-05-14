@@ -5,10 +5,12 @@ import {
   UpdateDateColumn,
   OneToMany,
   PrimaryColumn,
-  BaseEntity
+  BaseEntity,
+  ManyToOne
 } from "typeorm";
 import { EmoteCount } from "./EmoteCount";
 import { ObjectType, Field, ID } from "type-graphql";
+import Guild from "./Guild";
 
 @ObjectType()
 @Entity()
@@ -44,4 +46,8 @@ export default class Emote extends BaseEntity {
   @Field(type => [EmoteCount])
   @OneToMany(type => EmoteCount, emoteCount => emoteCount.emote)
   emoteCounts: EmoteCount[];
+
+  @Field(type => Guild)
+  @ManyToOne(type => Guild, guild => guild.emotes)
+  guild: Guild;
 }

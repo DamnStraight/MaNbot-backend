@@ -47,7 +47,7 @@ export class EmoteCount extends BaseEntity {
   @Column()
   count: number;
 
-  addCount(add: number) {
+  addCount(add: number): void {
     this.count += add;
   }
 }

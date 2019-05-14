@@ -4,10 +4,13 @@ import {
   UpdateDateColumn,
   OneToMany,
   PrimaryColumn,
-  BaseEntity
+  BaseEntity,
+  ManyToMany
 } from "typeorm";
 import { EmoteCount } from "./EmoteCount";
 import { ObjectType, Field } from "type-graphql";
+import Message from "./Message";
+import Guild from "./Guild";
 
 @ObjectType()
 @Entity()
@@ -32,4 +35,11 @@ export default class User extends BaseEntity {
   @Field(type => [EmoteCount])
   @OneToMany(type => EmoteCount, emoteCount => emoteCount.user)
   emoteCounts: EmoteCount[];
+
+  @Field(type => [Message])
+  @OneToMany(type => Message, message => message.user, { lazy: true })
+  messages: Promise<Message[]>;
+
+  @ManyToMany(type => Guild, guild => guild.users)
+  guilds: Guild[];
 }
