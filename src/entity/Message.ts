@@ -21,6 +21,10 @@ export default class Message extends BaseEntity {
     if (data) {
       this.userId = data.userId;
       this.content = data.content;
+      this.dateSent = data.dateSent;
+      this.channelId = data.channelId;
+      this.profileImage = data.profileImage;
+      this.userName = data.userName;
     }
   }
 
@@ -70,7 +74,8 @@ export default class Message extends BaseEntity {
       userName: this.userName,
       profileImage: this.profileImage,
       content: this.content,
-      dateSent: this.dateSent
+      dateSent: this.dateSent,
+      channelId: this.channelId
     } as MessagePayload;
   }
 }

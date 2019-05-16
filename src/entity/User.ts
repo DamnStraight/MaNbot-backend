@@ -17,7 +17,10 @@ import Guild from "./Guild";
 export default class User extends BaseEntity {
   public constructor(data?: string) {
     super();
-    if (data) this.id = data;
+    if (data) {
+      this.id = data;
+      this.guilds = [];
+    }
   }
 
   @Field()
@@ -39,6 +42,7 @@ export default class User extends BaseEntity {
   @Field(type => [Message])
   @OneToMany(type => Message, message => message.user, { lazy: true })
   messages: Promise<Message[]>;
+
 
   @ManyToMany(type => Guild, guild => guild.users)
   guilds: Guild[];

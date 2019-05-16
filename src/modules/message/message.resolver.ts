@@ -28,10 +28,10 @@ export class MessageResolver {
 
   @Mutation(returns => Message, { nullable: true })
   async addMessage(
-    @Arg("data", type => AddMessageInput) messageDto: AddMessageInput,
+    @Arg("data", type => AddMessageInput) data: AddMessageInput,
     @PubSub() pubSub: PubSubEngine
   ) {
-    const message = await this.messageService.addMessage(messageDto.toModel());
+    const message = await this.messageService.addMessage(data.toModel());
     await pubSub.publish("MESSAGES", message.toPayload());
   }
 }

@@ -7,6 +7,14 @@ import User from "./User";
 @ObjectType()
 @Entity()
 export default class Guild extends BaseEntity {
+  public constructor(data?: Guild) {
+    super();
+    if (data) {
+      this.id = data.id;
+      this.name = data.name;
+    }
+  }
+
   @Field()
   @PrimaryColumn()
   id: string;

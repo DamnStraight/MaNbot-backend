@@ -20,6 +20,7 @@ export default class Emote extends BaseEntity {
     if (data) {
       this.id = data.id;
       this.name = data.name;
+      this.guild = data.guild;
     }
   }
 

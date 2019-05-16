@@ -13,7 +13,7 @@ export class AddMessageInput {
   userName: string;
 
   @Field()
-  dateSent: Date;
+  dateSent: string;
 
   @Field()
   profileImage: string;
@@ -24,7 +24,11 @@ export class AddMessageInput {
   public toModel() {
     return new Message({
       userId: this.userId,
-      content: this.content
+      content: this.content,
+      channelId: this.channelId,
+      userName: this.userName,
+      dateSent: new Date(this.dateSent),
+      profileImage: this.profileImage,
     } as Message);
   }
 }

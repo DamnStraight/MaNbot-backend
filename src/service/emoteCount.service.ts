@@ -1,12 +1,11 @@
+import { ApolloError } from "apollo-server-core";
 import { Service } from "typedi";
-import { getRepository } from "typeorm";
-import serviceDebug from "../util/serviceDebug";
 import { EmoteCount } from "../entity/EmoteCount";
+import { SaveEmoteCountInput } from "../modules/emoteCount/input/SaveEmoteCountInput";
+import asyncForEach from "../util/asyncForeach";
+import appDebugger from "../util/appDebugger";
 import { EmoteService } from "./emote.service";
 import { UserService } from "./user.service";
-import { ApolloError } from "apollo-server-core";
-import asyncForEach from "../util/asyncForeach";
-import { SaveEmoteCountInput } from "src/modules/emoteCount/input/SaveEmoteCountInput";
 
 @Service()
 export class EmoteCountService {
@@ -14,6 +13,9 @@ export class EmoteCountService {
     private readonly emoteService: EmoteService,
     private readonly userService: UserService
   ) {}
+
+  private eventLogger = appDebugger("service", "emoteCount", "event");
+  private errorLogger = appDebugger("service", "emoteCount", "error");
 
   /**
    * Return the EmoteCount object for a a matching User and Emote
@@ -30,9 +32,7 @@ export class EmoteCountService {
 
       return maybeEmoteCount || null;
     } catch (err) {
-      serviceDebug(
-        "error",
-        "emoteCount",
+      this.errorLogger(
         `Error finding EmoteCount in getByUserEmote(${userId}, ${emoteId})`
       );
 

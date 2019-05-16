@@ -25,4 +25,9 @@ export class UserResolver {
   async addUser(@Arg("userId") userId: string): Promise<User | null> {
     return await this.userService.addUser(userId);
   }
+
+  @Mutation(returns => [User], { nullable: true })
+  async addUsers(@Arg("guildId") guildId: string, @Arg("users", type => String) users: string[]) {
+    return await this.userService.addUsers(guildId, users);
+  }
 }

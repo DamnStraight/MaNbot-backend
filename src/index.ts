@@ -8,6 +8,8 @@ import { UserResolver } from "./modules/user/user.resolver";
 import { EmoteResolver } from "./modules/emote/emote.resolver";
 import { EmoteCountResolver } from "./modules/emoteCount/emoteCount.resolver";
 import { MessageResolver } from "./modules/message/message.resolver";
+import { GuildResolver } from "./modules/guild/guild.resolver";
+import { ChannelResolver } from "./modules/channel/channel.resolver";
 import { createServer } from "http";
 
 const main = async () => {
@@ -18,7 +20,9 @@ const main = async () => {
       UserResolver,
       EmoteResolver,
       EmoteCountResolver,
-      MessageResolver
+      MessageResolver,
+      GuildResolver,
+      ChannelResolver
     ],
     container: Container,
     validate: false

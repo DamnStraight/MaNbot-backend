@@ -1,18 +1,22 @@
+import { ApolloError } from "apollo-server-core";
 import { Service } from "typedi";
-import Emote from "../entity/Emote";
 import { getRepository } from "typeorm";
-
-import serviceDebug from "../util/serviceDebug";
-import { AddEmoteInput } from "src/modules/emote/input/AddEmoteInput";
+import Emote from "../entity/Emote";
+import Guild from "../entity/Guild";
+import { AddEmoteInput } from "../modules/emote/input/AddEmoteInput";
+import appDebugger from "../util/appDebugger";
 
 @Service()
 export class EmoteService {
+  private eventLogger = appDebugger("service", "emote", "event");
+  private errorLogger = appDebugger("service", "emote", "error");
+
   /**
    * Find a single emote by id and return it if it exists
    * @param id
    */
   async getOne(id: string) {
-    serviceDebug("event", "emote", `Querying getOne() with id { ${id} }`);
+    this.eventLogger(`Querying getOne() with id { ${id} }`);
     return await Emote.findOne(id);
   }
 
@@ -23,14 +27,13 @@ export class EmoteService {
     try {
       const emoteRepository = await getRepository(Emote);
 
-      serviceDebug("event", "emote", `Querying getAll()`);
+      this.eventLogger(`Querying getAll()`);
 
       return await emoteRepository.find();
     } catch (err) {
       return [];
     }
   }
-
 
   /**
    * Add a single emote and return it if successful
@@ -41,14 +44,14 @@ export class EmoteService {
 
     if (maybeEmote) return maybeEmote;
 
-    serviceDebug("event", "emote", `Creating emote with id { ${emoteId} }`);
+    this.eventLogger(`Creating emote with id { ${emoteId} }`);
 
     try {
       const newUser = await Emote.insert(new Emote());
 
       return { id: emoteId, ...newUser.generatedMaps[0] } as Emote;
     } catch (err) {
-      serviceDebug("error", "emote", `Error creating user: ${err}`);
+      this.errorLogger(`Error creating user: ${err}`);
 
       return null;
     }
@@ -58,24 +61,30 @@ export class EmoteService {
    * Add many emotes at once, return the result
    * @param emoteDtos
    */
-  async addEmotes(emoteDtos: AddEmoteInput[]): Promise<Emote[]> {
-    const emoteModels: Emote[] = emoteDtos.map(
-      emote => new Emote({ id: emote.id, name: emote.name } as Emote)
-    );
-
+  async addEmotes(
+    guildId: string,
+    emoteDtos: AddEmoteInput[]
+  ): Promise<Emote[]> {
     try {
+      const guild = await Guild.findOne(guildId);
+
+      if (!guild) throw new ApolloError("Guild doesn't exist");
+
+      const emoteModels: Emote[] = emoteDtos.map(
+        emote => new Emote({ id: emote.id, name: emote.name, guild } as Emote)
+      );
+
+      this.eventLogger(`Querying addEmotes() with guildId: \"${guildId}\"`);
+
       const savedEmotes: Emote[] = await Emote.save(emoteModels);
+
+      this.eventLogger(`addEmotes() ran successfully`);
 
       return savedEmotes;
     } catch (err) {
-      serviceDebug(
-       "error",
-        "emote",
-        `Error adding emotes in addEmotes(): ${err}`
-      );
+      this.errorLogger(`Error adding emotes in addEmotes(): ${err}`);
 
-      return [];
+      throw new ApolloError("Database error occured");
     }
   }
-
 }
